@@ -1,0 +1,10 @@
+{
+  "name": "xtracode/yii2-image",
+  "description": "Yii2 image module",
+  "require": {
+	"php": ">=5.3.0",
+	"yiisoft/yii2": "*",
+    "yiisoft/yii2-imagine": "~2.0.0",
+    "bupy7/yii2-widget-cropbox": "3.*"
+  }
+}
