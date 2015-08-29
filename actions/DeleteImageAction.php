@@ -1,8 +1,8 @@
 <?php
 
-namespace common\modules\image\actions;
+namespace xtracode\image\actions;
 
-use common\modules\image\models\Image;
+use xtracode\image\models\Image;
 use Yii;
 use yii\base;
 use yii\helpers\VarDumper;

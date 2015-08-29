@@ -1,8 +1,8 @@
 <?php
 
-namespace common\modules\image\behaviors;
+namespace xtracode\image\behaviors;
 
-use common\modules\image\models\Image;
+use xtracode\image\models\Image;
 use Imagine\Image\Box;
 use Imagine\Image\Point;
 use yii;

@@ -1,6 +1,6 @@
 <?php
 
-namespace common\modules\image\models;
+namespace xtracode\image\models;
 
 use Yii;
 use yii\helpers\VarDumper;
@@ -8,7 +8,7 @@ use yii\helpers\VarDumper;
 /**
  * This is the model class for table "image".
  */
-class Image extends \common\modules\image\models\base\Image
+class Image extends \xtracode\image\models\base\Image
 {
     /**
      * Image

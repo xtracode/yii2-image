@@ -1,8 +1,8 @@
 <?php
 
-namespace common\modules\image\widgets;
+namespace xtracode\image\widgets;
 
-use common\modules\image\models\Image;
+use xtracode\image\models\Image;
 use yii\helpers\Html;
 use yii\helpers\VarDumper;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace common\modules\article;
+namespace xtracode\image;
 
 use yii\base\BootstrapInterface;
 use yii\helpers\VarDumper;

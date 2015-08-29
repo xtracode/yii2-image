@@ -1,6 +1,6 @@
 <?php
 
-namespace common\modules\image\models\base;
+namespace xtracode\image\models\base;
 
 use Yii;
 

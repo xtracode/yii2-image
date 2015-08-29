@@ -1,10 +1,10 @@
 <?php
 
-namespace common\modules\image;
+namespace xtracode\image;
 
 class ImageModule extends \yii\base\Module
 {
-    public $controllerNamespace = 'common\modules\image\controllers';
+    public $controllerNamespace = 'xtracode\image\controllers';
 
     public function init()
     {

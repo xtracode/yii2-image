@@ -1,10 +1,19 @@
 {
   "name": "xtracode/yii2-image",
   "description": "Yii2 image module",
+  "keywords": ["yii2", "extension", "widget", "image"],
+  "homepage": "https://github.com/xtracode/yii2-image",
+  "type": "yii2-extension",
   "require": {
-	"php": ">=5.3.0",
-	"yiisoft/yii2": "*",
+    "php": ">=5.3.0",
+    "yiisoft/yii2": "*",
     "yiisoft/yii2-imagine": "~2.0.0",
-    "bupy7/yii2-widget-cropbox": "3.*"
+    "bupy7/yii2-widget-cropbox": "3.*",
+    "newerton/yii2-fancybox": "dev-master"
+  },
+  "autoload": {
+    "psr-4": {
+      "xtracode\\image\\": ""
+    }
   }
 }
