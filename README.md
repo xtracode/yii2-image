@@ -1,7 +1,14 @@
 Image Module for Yii2
 ==============================
 
-Image module.
+Yii2 module for image manipulating.
+
+Features
+--------
+- [x] image upload
+- [x] display image widget
+- [ ] watermark (text and image)
+- [ ] image resize on demand
 
 Installation
 ------------
@@ -19,6 +26,25 @@ or add
 ```
 
 to the require section of your application's `composer.json` file.
+
+Configuration
+=============
+
+- Add module to config section:
+
+```
+'modules' => [
+    'image' => [
+        'class' => 'xtracode\yii2-image\ImageModule'
+    ]
+]
+```
+
+- Run migrations:
+
+```
+php yii migrate --migrationPath=@xtracode/yii2-image/migrations
+```
 
 Usage
 -----
