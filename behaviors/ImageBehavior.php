@@ -336,12 +336,13 @@ class ImageBehavior extends Behavior
     /**
      * Thumb image of model
      *
-     * @param $width
-     * @param $height
+     * @param null $width
+     * @param null $height
      * @param bool $main
+     * @param bool $make_resize
      * @return array|null|ActiveRecord
      */
-    public function getThumbImage($width = null, $height = null, $main = false)
+    public function getThumbImage($width = null, $height = null, $main = false, $make_resize = true)
     {
         // Get info about owner class
         $class = new \ReflectionClass($this->owner);
@@ -353,6 +354,10 @@ class ImageBehavior extends Behavior
             'height' => !empty($height) ? $height : $this->thumb_sizes[0]['height'],
             'main' => $main ? 1 : 0,
         ])->one();
+
+        if (empty($model) && !empty($width) && !empty($height) && $make_resize) {
+            $model = $this->getResizedImage($width, $height);
+        }
 
         return $model;
     }
@@ -388,6 +393,31 @@ class ImageBehavior extends Behavior
         }
     }
 
+    /**
+     * Grid images
+     *
+     * @param null $width
+     * @param null $height
+     * @return null
+     */
+    public function getGridImage($width = null, $height = null)
+    {
+        $models = $this->getModelImages($this->owner->id, false, true);
+
+        if (empty($width) || empty($height)) {
+            $thumb_size = $this->getThumbImageSize();
+        }
+
+        if (!empty($models)) {
+            $images['original'] = $models['original'];
+            $images['thumb'] = $models[$thumb_size];
+        } else {
+            $images = null;
+        }
+
+        return $images;
+    }
+    
     /**
      * Save images from URL
      *
@@ -426,5 +456,85 @@ class ImageBehavior extends Behavior
         $_FILES[$class_name]['size']['images'][] = filesize($file);
 
         return $file;
+    }
+
+    /**
+     * Make resize on the fly
+     *
+     * @param $width
+     * @param $height
+     * @return array|bool|null|ActiveRecord
+     */
+    public function getResizedImage($width, $height)
+    {
+        // Get info about owner class
+        $class = new \ReflectionClass($this->owner);
+
+        // Check image the thumb image doesn't exist
+        $model = Image::find()->where([
+            'model' => $class->getShortName(),
+            'model_id' => $this->owner->id,
+            'width' => $width,
+            'height' => $height,
+        ])->one();
+
+        if (empty($model)) {
+            // Get original model image
+            $original_image_model = Image::find()->where([
+                'model' => $class->getShortName(),
+                'model_id' => $this->owner->id,
+                'pid' => null,
+            ])->one();
+
+            $original_image = Yii::getAlias('@frontend/web/upload/') . $original_image_model->dir . '/' . $original_image_model->file_name;
+
+            // Saving crop thumbnail
+            $image = yii\imagine\Image::getImagine()->open($original_image);
+
+            $newSizeThumb = new Box($width, $height);
+//            $cropSizeThumb = new Box($width, $height); //frame size of crop
+//            $cropPointThumb = new Point($cropInfo['x'], $cropInfo['y']);
+
+            $sub_dirs = substr(md5(time() + rand()), 0, 2) . '/' . substr(md5(time() + rand()), 0, 2) . '/' . substr(md5(time() + rand()), 0, 2) . '/' . substr(md5(time() + rand()), 0, 2);
+            $dir = $this->default_dir . '/' . $sub_dirs;
+            $dir_path = Yii::getAlias('@frontend/web/upload/') . $dir;
+
+            if (!is_dir($dir_path)) {
+                @mkdir($dir_path, 0777, true);
+            }
+
+            $pathinfo = pathinfo($original_image);
+            $ext = $pathinfo['extension'];
+
+            $file_name = $this->owner->id . '_' . md5(time() + rand()) . '.' . $ext;
+            $pathThumbImage = $dir_path . '/' . $file_name;
+
+            $image_saved = $image->resize($newSizeThumb)
+                ->save($pathThumbImage, ['quality' => 100]);
+
+//            yii\helpers\VarDumper::dump($pathThumbImage, 10, true);
+//            yii\helpers\VarDumper::dump($image_saved, 10, true);
+//            exit();
+
+            // Save new thumb image to DB
+            $new_thumb_image = new Image;
+            $new_thumb_image->model = $class->getShortName();
+            $new_thumb_image->pid = $original_image_model->id;
+            $new_thumb_image->model_id = $this->owner->id;
+            $new_thumb_image->dir = $dir;
+            $new_thumb_image->file_name = $file_name;
+            $new_thumb_image->width = $width;
+            $new_thumb_image->height = $height;
+            if ($image_saved) {
+                $new_thumb_image->create_time = date('Y-m-d H:i:s');
+                $new_thumb_image->save();
+
+//                $new_thumb_image_file = $dir_path . '/' . $file_name;
+            }
+
+            return !empty($new_thumb_image) ? $new_thumb_image : null;
+        } else {
+            return false;
+        }
     }
 }

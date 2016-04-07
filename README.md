@@ -8,7 +8,7 @@ Features
 - [x] image upload
 - [x] display image widget
 - [ ] watermark (text and image)
-- [ ] image resize on demand
+- [x] image resize on demand
 
 Installation
 ------------
