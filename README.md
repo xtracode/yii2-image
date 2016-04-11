@@ -1,6 +1,11 @@
 Image Module for Yii2
 ==============================
 
+[![License](https://poser.pugx.org/xtracode/yii2-image/license.svg)](https://packagist.org/packages/xtracode/yii2-image)
+[![Latest Stable Version](https://poser.pugx.org/xtracode/yii2-image/v/stable.svg)](https://packagist.org/packages/xtracode/yii2-image)
+[![Latest Unstable Version](https://poser.pugx.org/xtracode/yii2-image/v/unstable.svg)](https://packagist.org/packages/xtracode/yii2-image)
+[![Total Downloads](https://poser.pugx.org/xtracode/yii2-image/downloads.svg)](https://packagist.org/packages/xtracode/yii2-image)
+
 Yii2 module for image manipulating.
 
 Features
@@ -48,13 +53,101 @@ php yii migrate --migrationPath=@xtracode/yii2-image/migrations
 
 Usage
 -----
-Using a model:
+
+- Add actions to your controller:
 
 ```
-use xtracode\image\widgets\ImageList;
+public function actions()
+{
+    return [
+        'delete-image' => [
+            'class' => '\xtracode\image\actions\DeleteImageAction',
+        ],
+        'main-image' => [
+            'class' => '\xtracode\image\actions\MainImageAction',
+        ],
+    ];
+}
+```
 
-<?= ImageList::widget([
-    'model' => $model,
-    'model_id' => $model->id,
-]) ?>
+### Upload multiple image###
+
+Use method **$model->uploadSingleImage()** in controller:
+
+```
+public function actionCreate()
+{
+    $model = new Article;
+
+    if ($model->load($_POST) && $model->save()) {
+        $model->uploadImage();
+
+        \Yii::$app->session->setFlash('success', \Yii::t('article', 'Article successfully saved'));
+        return $this->redirect(['view', 'id' => $model->id]);
+    } else {
+        return $this->render('create', [
+            'model' => $model,
+        ]);
+    }
+}
+```
+
+In view:
+
+```
+<div class="col-sm-offset-1">
+    <?= \xtracode\image\widgets\ImageList::widget([
+        'model' => $model,
+        'model_id' => $model->id,
+    ]) ?>
+</div>
+
+<?= $form->field($model, 'images[]')->widget(\kartik\widgets\FileInput::classname(), [
+    'options' => ['accept' => 'image/*', 'multiple' => true],
+    'pluginOptions' => [
+        'showCaption' => true,
+        'showUpload' => false
+    ]
+]); ?>
+```
+
+### Upload single image###
+
+use method **$model->uploadSingleImage()** in controller:
+
+```
+public function actionCreate()
+{
+    $model = new Article;
+
+    if ($model->load($_POST) && $model->save()) {
+        $model->uploadSingleImage();
+
+        \Yii::$app->session->setFlash('success', \Yii::t('article', 'Article successfully saved'));
+        return $this->redirect(['view', 'id' => $model->id]);
+    } else {
+        return $this->render('create', [
+            'model' => $model,
+        ]);
+    }
+}
+```
+
+In view:
+
+```
+<div class="col-sm-offset-1">
+    <?= \xtracode\image\widgets\ImageList::widget([
+        'model' => $model,
+        'model_id' => $model->id,
+    ]) ?>
+</div>
+
+<?= $form->field($model, 'image')->widget(\kartik\widgets\FileInput::classname(), [
+    'options' => ['accept' => 'image/*', 'multiple' => true],
+    'pluginOptions' => [
+        'showCaption' => true,
+        'showUpload' => false
+    ]
+]); ?>
 ```
