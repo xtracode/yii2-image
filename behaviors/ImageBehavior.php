@@ -338,11 +338,9 @@ class ImageBehavior extends Behavior
      *
      * @param null $width
      * @param null $height
-     * @param bool $main
-     * @param bool $make_resize
      * @return array|null|ActiveRecord
      */
-    public function getThumbImage($width = null, $height = null, $main = false, $make_resize = true)
+    public function getThumbImage($width = null, $height = null)
     {
         // Get info about owner class
         $class = new \ReflectionClass($this->owner);
@@ -352,10 +350,9 @@ class ImageBehavior extends Behavior
             'model' => $class->getShortName(),
             'width' => !empty($width) ? $width : $this->thumb_sizes[0]['width'],
             'height' => !empty($height) ? $height : $this->thumb_sizes[0]['height'],
-            'main' => $main ? 1 : 0,
         ])->one();
 
-        if (empty($model) && !empty($width) && !empty($height) && $make_resize) {
+        if (empty($model) && !empty($width) && !empty($height)) {
             $model = $this->getResizedImage($width, $height);
         }
 
@@ -470,7 +467,7 @@ class ImageBehavior extends Behavior
         // Get info about owner class
         $class = new \ReflectionClass($this->owner);
 
-        // Check image the thumb image doesn't exist
+        // Check if the thumb image doesn't exist to create new
         $model = Image::find()->where([
             'model' => $class->getShortName(),
             'model_id' => $this->owner->id,
@@ -487,6 +484,10 @@ class ImageBehavior extends Behavior
             ])->one();
 
             $original_image = Yii::getAlias('@frontend/web/upload/') . $original_image_model->dir . '/' . $original_image_model->file_name;
+
+            if (!file_exists($original_image)) {
+                return false;
+            }
 
             // Saving crop thumbnail
             $image = yii\imagine\Image::getImagine()->open($original_image);
