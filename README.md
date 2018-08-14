@@ -26,8 +26,8 @@ php composer.phar require "xtracode/yii2-image" "*"
 ```
 or add
 
-```json
-"xtracode/yii2-image" : "*"
+```
+"xtracode/yii2-image" : "dev-master"
 ```
 
 to the require section of your application's `composer.json` file.
@@ -37,7 +37,7 @@ Configuration
 
 - Add module to config section:
 
-```
+```php
 'modules' => [
     'image' => [
         'class' => 'xtracode\yii2-image\ImageModule'
@@ -47,7 +47,7 @@ Configuration
 
 - Run migrations:
 
-```
+```php
 php yii migrate --migrationPath=@xtracode/yii2-image/migrations
 ```
 
@@ -56,7 +56,7 @@ Usage
 
 - Add actions to your controller:
 
-```
+```php
 public function actions()
 {
     return [
@@ -70,11 +70,12 @@ public function actions()
 }
 ```
 
-### Upload multiple image###
+Upload multiple image
+---------------------
 
 Use method **$model->uploadSingleImage()** in controller:
 
-```
+```php
 public function actionCreate()
 {
     $model = new Article;
@@ -94,7 +95,7 @@ public function actionCreate()
 
 In view:
 
-```
+```php
 <div class="col-sm-offset-1">
     <?= \xtracode\image\widgets\ImageList::widget([
         'model' => $model,
@@ -111,11 +112,12 @@ In view:
 ]); ?>
 ```
 
-### Upload single image###
+Upload single image
+-------------------
 
 use method **$model->uploadSingleImage()** in controller:
 
-```
+```php
 public function actionCreate()
 {
     $model = new Article;
@@ -135,7 +137,7 @@ public function actionCreate()
 
 In view:
 
-```
+```php
 <div class="col-sm-offset-1">
     <?= \xtracode\image\widgets\ImageList::widget([
         'model' => $model,
