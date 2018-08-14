@@ -19,7 +19,7 @@
   },
   "autoload": {
     "psr-4": {
-      "xtracode\\image\\": ""
+      "xtracode\\image\\": "src"
     }
   },
   "repositories": [

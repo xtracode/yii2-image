@@ -8,6 +8,8 @@ Image Module for Yii2
 
 Yii2 module for image manipulating.
 
+Documentation is at [docs/guide/README.md](docs/guide/README.md).
+
 Features
 --------
 - [x] image upload
@@ -22,7 +24,7 @@ The preferred way to install this extension is through [composer](http://getcomp
 Either run
 
 ```
-php composer.phar require "xtracode/yii2-image" "*"
+php composer.phar require "xtracode/yii2-image" "dev-master"
 ```
 or add
 
@@ -102,14 +104,6 @@ In view:
         'model_id' => $model->id,
     ]) ?>
 </div>
-
-<?= $form->field($model, 'images[]')->widget(\kartik\widgets\FileInput::classname(), [
-    'options' => ['accept' => 'image/*', 'multiple' => true],
-    'pluginOptions' => [
-        'showCaption' => true,
-        'showUpload' => false
-    ]
-]); ?>
 ```
 
 Upload single image
@@ -144,12 +138,6 @@ In view:
         'model_id' => $model->id,
     ]) ?>
 </div>
-
-<?= $form->field($model, 'image')->widget(\kartik\widgets\FileInput::classname(), [
-    'options' => ['accept' => 'image/*', 'multiple' => true],
-    'pluginOptions' => [
-        'showCaption' => true,
-        'showUpload' => false
-    ]
-]); ?>
 ```
+
+For more details see [the guide](docs/guide/README.md).
